@@ -1,4 +1,4 @@
-figma.showUI(__html__)
+figma.showUI(__html__, { width: 290, height: 130})
 
 const SQUARE_SPACING = 150
 const VERTICAL_THEME_SPACING = 200
@@ -108,7 +108,7 @@ figma.ui.onmessage = msg => {
 			}
 		})
 
-		figma.closePlugin()
+		// figma.closePlugin()
 		return
 	}
 
