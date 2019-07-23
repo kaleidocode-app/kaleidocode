@@ -1,0 +1,8 @@
+{
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "prettier.printWidth": 100,
+  "files.associations": {
+    "*.json5": "jsonc"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Kalaid",
+  "id": "735586928355001993",
+  "api": "0.6.0",
+  "main": "dist/code.js",
+  "ui": "dist/ui.html"
+}
