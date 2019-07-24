@@ -4,6 +4,11 @@
     font-size: 16px;
   }
 
+  html,
+  body {
+    height: 100%;
+  }
+
   *,
   *:before,
   *:after {
@@ -38,10 +43,8 @@
   html {
     color: #333;
     font-size: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  }
-  body {
-    margin: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   }
 
   input,
@@ -56,9 +59,15 @@
   textarea:focus {
     outline: 2px solid #18a0fb;
   }
-  textarea, select {
+  .checkboxes,
+  textarea,
+  select {
     width: 100%;
     margin-bottom: 12px;
+    white-space: nowrap;
+  }
+  textarea {
+    height: 100px;
   }
   a {
     color: #18a0fb;
@@ -85,6 +94,12 @@
     border-color: #333;
     background-color: transparent;
   }
+  #content {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 20px;
+    height: 100%;
+  }
   .subheading {
     font-size: 80%;
     font-weight: 800;
@@ -92,22 +107,99 @@
     margin-bottom: 4px;
   }
   .buttons {
-    margin-top: 8px;
     display: flex;
   }
   #loadThemes {
     margin-top: 8px;
   }
+
+  .tabs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .tabs li {
+    margin-right: 16px;
+  }
+
+  .tabs li a {
+    color: #b3b3b3;
+    font-weight: 500;
+    text-decoration: none;
+    padding-right: 4px;
+  }
+
+  .tabs li .active {
+    color: #333;
+    font-weight: 600;
+  }
+
+  .tabContent {
+    display: none;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  .tabContent.active {
+    display: flex;
+  }
 </style>
 
-<select id="themes">
-    <option value="dark-plus">Dark Plus</option>
-    <option value="light-plus">Light Plus</option>
-    <option value="nord">Nord</option>
-    <option value="material-palenight">Material Palenight</option>
-</select> 
+<div id="content">
+  <ul class="tabs">
+    <li><a class="tab" id="tab-button-generate" href="#">Generate</a></li>
+    <li><a class="tab" id="tab-button-theme" href="#">Theme</a></li>
+    <li><a class="tab" id="tab-button-create" href="#">Create</a></li>
+  </ul>
+  
+  <div id="contentGenerate" class="tabContent">
+    <select id="generateThemes">
+      <option value="all">All Themes</option>
+      <option value="dark-plus">Dark</option>
+      <option value="light-plus">Light</option>
+      <option value="ayu-light">Ayu Light</option>
+      <option value="dracula">Dracula</option>
+      <option value="nord">Nord</option>
+    </select>
+  
+    <div class="buttons">
+      <button class="button-primary" id="create-styles">Create Styles</button>
+    </div>
+  </div>
+  
+  <div id="contentTheme" class="tabContent">
+    <select id="themes">
+      <option value="dark-plus">Dark</option>
+      <option value="light-plus">Light</option>
+      <option value="ayu-light">Ayu Light</option>
+      <option value="dracula">Dracula</option>
+      <option value="nord">Nord</option>
+    </select>
+    <div class="buttons">
+      <button class="button-primary" id="switch-styles">Switch Styles</button>
+    </div>
+  </div>
 
-<div class="buttons">
-  <button class="button-primary" id="create-styles">Create Styles</button>
-  <button class="button-secondary" id="switch-styles">Switch Styles</button>
+  <div id="contentCreate" class="tabContent">
+    <textarea id="custom-theme">
+      {
+        "name": "Sample",
+        "type": "dark",
+        "colors": {
+          "activityBar.background": "#fafafa",
+          "activityBar.border": "#fafafa",
+          "activityBar.foreground": "#959da6cc",
+          "activityBarBadge.background": "#ff9940"
+        }
+        
+      }
+    </textarea>
+    <div class="buttons">
+      <button class="button-primary" id="create-custom">Create Custom Style</button>
+    </div>
+  </div>
+
+  
 </div>
