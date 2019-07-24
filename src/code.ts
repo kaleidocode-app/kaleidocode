@@ -1,3 +1,5 @@
+import { createColorGuide, createStyle } from "./color-guide";
+
 figma.showUI(__html__, { width: 300, height: 200 })
 
 const SQUARE_SPACING = 150
@@ -22,7 +24,17 @@ const themeAyuLight = require('../themes/ayu-light.json5')
 const themeDracula = require('../themes/dracula.json5')
 const themeNord = require('../themes/nord.json5')
 
-figma.ui.onmessage = msg => {
+figma.ui.onmessage = async msg => {
+	const fonts = [
+		{ family: 'Roboto', style: 'Regular' },
+		{ family: 'Roboto', style: 'Medium' },
+		{ family: 'Roboto Mono', style: 'Regular' },
+		{ family: 'Roboto Mono', style: 'Bold' }
+	]
+
+	for (let f of fonts) {
+		await figma.loadFontAsync(f)
+	}
 
 	if (msg.type === 'create-styles') {
 
@@ -42,8 +54,7 @@ figma.ui.onmessage = msg => {
 
 		themes.reverse().forEach((theme, themeI) => {
 			const themeColors = theme.colors
-			console.log(themeColors)
-			const colorTheme = theme.name.toLowerCase()
+			const colorThemeName = theme.name.toLowerCase()
 
 			// sort object
 			let sortedObject = Object.keys(themeColors).sort()
@@ -53,24 +64,7 @@ figma.ui.onmessage = msg => {
 				return [k, themeColors[k]]
 			})
 
-			// iterate on each color
-			const rects = []
-			sortedColors.forEach(([colorName, colorValue], i) => {
-				if (!colorValue || colorValue === '') {
-					colorValue = '#ffffff'
-				}
-				const rect = createRect(
-					colorTheme,
-					colorName,
-					i * SQUARE_SPACING,
-					themeI * VERTICAL_THEME_SPACING
-				)
-				rect.fillStyleId = createStyle(colorTheme, colorName, colorValue)
-				rects.push(rect)
-			})
-
-			const group = figma.group(rects, figma.currentPage)
-			group.name = `--${colorTheme}`
+			createColorGuide(colorThemeName, sortedColors, themeI)
 		})
 
 		figma.closePlugin()
@@ -84,16 +78,24 @@ figma.ui.onmessage = msg => {
 		}
 
 		const themeNodes = figma.currentPage.findAll(node => {
-			return node.name.startsWith('--') && node.type === 'GROUP'
+			return node.name.startsWith('--') && node.type === 'FRAME'
 		}) as FrameNode[]
 
+		console.log(themeNodes)
 		const themes = {}
 
 		themeNodes.forEach(t => {
-			themes[t.name.slice(2)] = {}
-			t.children.forEach((tc: RectangleNode) => {
-				themes[t.name.slice(2)][tc.name] = String(tc.fillStyleId)
-			})
+			const themeColorName = t.parent.parent.name
+			const fullColorName = themeColorName + ' / ' + t.name.slice(2)
+			if (!themes[themeColorName]) {
+				themes[themeColorName] = {}
+			}
+
+			if (!themes[themeColorName][fullColorName]) {
+				themes[themeColorName][fullColorName] = {}
+			}
+
+			themes[themeColorName][fullColorName] = (t.children[0] as RectangleNode).fillStyleId
 		})
 
 		console.log(themes)
@@ -129,7 +131,6 @@ figma.ui.onmessage = msg => {
 			}
 		})
 
-		// figma.closePlugin()
 		return
 	}
 
@@ -226,64 +227,3 @@ function createRect(colorTheme: string, colorName: string, xOffset: number, yOff
 	return rect
 }
 
-function createStyle(
-	colorTheme: string,
-	colorName: string,
-	colorValue: string
-) {
-	// convert color from hex => rgb
-	const color = convertHexToRGBA(colorValue)
-	// create new style
-	const style = figma.createPaintStyle()
-	style.name = colorTheme + ' / ' + colorName
-
-	const solidPaint: SolidPaint = {
-		type: 'SOLID',
-		color: {
-			r: color[0] / 255,
-			g: color[1] / 255,
-			b: color[2] / 255
-		},
-		opacity: color[3] ? color[3] / 255 : 1
-	}
-	style.paints = [solidPaint]
-
-	return style.id
-}
-
-function convertHexToRGBA(hex: any) {
-	'use strict'
-	if (hex.charAt(0) === '#') {
-		hex = hex.substr(1)
-	}
-	if (hex.length < 2 || hex.length > 8) {
-		return false
-	}
-	var values = hex.split(''),
-		r: any,
-		g: any,
-		b: any,
-		a: any
-
-	if (hex.length === 2) {
-		r = parseInt(values[0].toString() + values[1].toString(), 16)
-		g = r
-		b = r
-	} else if (hex.length === 3) {
-		r = parseInt(values[0].toString() + values[0].toString(), 16)
-		g = parseInt(values[1].toString() + values[1].toString(), 16)
-		b = parseInt(values[2].toString() + values[2].toString(), 16)
-	} else if (hex.length === 6) {
-		r = parseInt(values[0].toString() + values[1].toString(), 16)
-		g = parseInt(values[2].toString() + values[3].toString(), 16)
-		b = parseInt(values[4].toString() + values[5].toString(), 16)
-	} else if (hex.length === 8) {
-		r = parseInt(values[0].toString() + values[1].toString(), 16)
-		g = parseInt(values[2].toString() + values[3].toString(), 16)
-		b = parseInt(values[4].toString() + values[5].toString(), 16)
-		a = parseInt(values[6].toString() + values[7].toString(), 16)
-	} else {
-		return false
-	}
-	return [r, g, b, a]
-}
