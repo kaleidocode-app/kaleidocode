@@ -193,42 +193,6 @@ figma.ui.onmessage = async msg => {
 		return
 	}
 
-	if (msg.type === 'create-rectangles') {
-		if (figma.currentPage.selection.length <= 0) {
-			return
-		}
-
-		const themeNodes = figma.currentPage.findAll(node => {
-			return node.name.startsWith(themeIndicator) && node.type === 'GROUP'
-		}) as FrameNode[]
-
-		const themes = {}
-
-		themeNodes.forEach(t => {
-			themes[t.name.slice(2)] = {}
-			t.children.forEach((tc: RectangleNode) => {
-				themes[t.name.slice(2)][tc.name] = String(tc.fillStyleId)
-			})
-		})
-
-		console.log(themes)
-
-		const selection = figma.currentPage.selection[0]
-		if (selection.type !== 'GROUP') {
-			return
-		}
-		const objectsToUpdate = selection.children
-		objectsToUpdate.forEach((c: RectangleNode) => {
-			const cStyle = figma.getStyleById(String(c.fillStyleId))
-
-			const newStyleId = cStyle.name.startsWith('dark')
-				? themes['light'][cStyle.name.replace('dark', 'light')]
-				: themes['dark'][cStyle.name.replace('light', 'dark')]
-
-			c.fillStyleId = newStyleId
-		})
-	}
-
 	if (msg.type === 'create-custom') {
 		const newTheme = JSON.parse(msg.newThemeCode)
 		themes.push(newTheme)
