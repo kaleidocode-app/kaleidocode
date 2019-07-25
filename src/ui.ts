@@ -62,5 +62,5 @@ tabButtonCreate.onclick = function() {
   addActive(tabButtonCreate, tabContentCreate)
 }
 
-tabButtonTheme.click()
+tabButtonGenerate.click()
 // document.getElementById('load-themes').click()

@@ -229,8 +229,7 @@ figma.ui.onmessage = async msg => {
 		themes.push(newTheme)
 		themes.reverse().forEach((theme, themeI) => {
 			const themeColors = theme.colors
-			console.log(themeColors)
-			const colorTheme = theme.name.toLowerCase()
+			const colorTheme = theme.name.replace(/\s+/g, '-').toLowerCase()
 
 			// sort object
 			let sortedObject = Object.keys(themeColors).sort()
@@ -240,24 +239,8 @@ figma.ui.onmessage = async msg => {
 				return [k, themeColors[k]]
 			})
 
-			// iterate on each color
-			const rects = []
-			sortedColors.forEach(([colorName, colorValue], i) => {
-				if (!colorValue || colorValue === '') {
-					colorValue = '#ffffff'
-				}
-				const rect = createRect(
-					colorTheme,
-					colorName,
-					i * SQUARE_SPACING,
-					themeI * VERTICAL_THEME_SPACING
-				)
-				rect.fillStyleId = createStyle(colorTheme, colorName, colorValue)
-				rects.push(rect)
-			})
+			createColorGuide(colorTheme, sortedColors, themeI)
 
-			const group = figma.group(rects, figma.currentPage)
-			group.name = `--${colorTheme}`
 		})
 
 		figma.closePlugin()
