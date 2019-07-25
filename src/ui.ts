@@ -38,6 +38,10 @@ const tabContentGuide = document.getElementById('contentGuide')
 function addActive(button, content){
   button.classList.add('active')
   content.classList.add('active')
+
+  // let page = button.id
+  // page = page.substr(11)
+  // parent.postMessage({ pluginMessage: { type: 'update-size', page } }, '*')
 }
 
 function removeActive(){
@@ -62,5 +66,4 @@ tabButtonCreate.onclick = function() {
   addActive(tabButtonCreate, tabContentCreate)
 }
 
-tabButtonTheme.click()
-// document.getElementById('load-themes').click()
+tabButtonGenerate.click()

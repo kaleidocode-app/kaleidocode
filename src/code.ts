@@ -1,6 +1,6 @@
 import { createColorGuide, createStyle } from "./color-guide";
 
-figma.showUI(__html__, { width: 260, height: 180 })
+figma.showUI(__html__, { width: 260, height: 230 })
 
 const SQUARE_SPACING = 150
 const VERTICAL_THEME_SPACING = 200
@@ -251,4 +251,24 @@ figma.ui.onmessage = async msg => {
 		figma.closePlugin()
 		return
 	}
+
+	// if (msg.type === 'update-size') {
+	// 	switch (msg.page) {
+	// 		case "create": {
+	// 			console.log("update custom");
+	// 			figma.ui.resize(260, 230)
+	// 			break;
+	// 		}
+	// 		case "theme": {
+	// 			console.log("Update theme");
+	// 			figma.ui.resize(260, 230)
+	// 			break;
+	// 		}
+	// 		case "generate": {
+	// 			console.log("Update create");
+	// 			figma.ui.resize(260, 230)
+	// 			break;
+	// 		}
+	// 	}
+	// }
 }
