@@ -23,9 +23,9 @@ export function createColorGuide(colorThemeName: string, sortedColors, n: number
 	let colorStylePosition = 0
 
 	figma.currentPage.children.forEach((c, index) => {
-		if (c.name.startsWith('--') && index === (colorStyleCounter - 2)) {
+		if (c.name.startsWith('--') && index === (colorStyleCounter - 1)) {
 			colorStylePosition = (c as FrameNode).x
-			xOffset = (colorStylePosition + colorGuideSpacing + guideFrameWidth) + colorGuideSpacing + guideFrameWidth
+			xOffset = (xOffset + guideFrameWidth + colorStylePosition + colorGuideSpacing) + colorGuideSpacing
 			console.log(colorStylePosition)
 			console.log(guideFrameWidth)
 			console.log(gap)
@@ -67,7 +67,7 @@ export function createColorGuide(colorThemeName: string, sortedColors, n: number
 		if (typeof item === 'string') {
       if (colorI !== 0) {
         colorFrameY += colorFrameHeight + gap * 10
-		colorFrameX += 0
+		colorFrameX = 0
       }
 
       createGroupLeadingBlock(item, colorFrameWidth, colorFrameHeight, innerGuideFrame, 0, colorFrameY)
