@@ -67,6 +67,7 @@
     white-space: nowrap;
   }
   textarea {
+    font-size: 10px;
     height: 100px;
   }
   a {
@@ -80,6 +81,7 @@
     font-weight: 500;
     text-align: center;
     min-width: 80px;
+    min-height: 32px;
     max-width: 200px;
     padding: 8px 12px;
     border: 1px solid transparent;
@@ -149,9 +151,9 @@
 
 <div id="content">
   <ul class="tabs">
-    <li><a class="tab" id="tab-button-generate" href="#">Generate</a></li>
+    <li><a class="tab" id="tab-button-generate" href="#">Create</a></li>
     <li><a class="tab" id="tab-button-theme" href="#">Theme</a></li>
-    <li><a class="tab" id="tab-button-create" href="#">Create</a></li>
+    <li><a class="tab" id="tab-button-create" href="#">Custom</a></li>
   </ul>
   
   <div id="contentGenerate" class="tabContent">
@@ -179,22 +181,22 @@
     </select>
     <div class="buttons">
       <button class="button-primary" id="switch-styles">Switch Styles</button>
+      <button class="button-secondary" id="relink-styles">Relink Styles</button>
     </div>
   </div>
 
   <div id="contentCreate" class="tabContent">
     <textarea id="custom-theme">
-      {
-        "name": "Sample",
-        "type": "dark",
-        "colors": {
-          "activityBar.background": "#fafafa",
-          "activityBar.border": "#fafafa",
-          "activityBar.foreground": "#959da6cc",
-          "activityBarBadge.background": "#ff9940"
-        }
-        
-      }
+{
+  "name": "Sample Theme",
+  "colors": {
+    "activityBar.background": "#fafafa",
+    "activityBar.border": "#fafafa",
+    "activityBar.foreground": "#959da6cc",
+    "activityBarBadge.background": "#ff9940"
+  }
+  
+}
     </textarea>
     <div class="buttons">
       <button class="button-primary" id="create-custom">Create Custom Style</button>

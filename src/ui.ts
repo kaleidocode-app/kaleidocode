@@ -10,6 +10,11 @@ document.getElementById('switch-styles').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'switch-styles', newThemeName } }, '*')
 }
 
+document.getElementById('relink-styles').onclick = () => {
+  const newThemeName = (document.getElementById('themes') as HTMLOptionElement).value
+  parent.postMessage({ pluginMessage: { type: 'relink-styles', newThemeName } }, '*')
+}
+
 document.getElementById('create-custom').onclick = () => {
   const newTheme = <any>(document.getElementById('custom-theme'))
   const newThemeCode = newTheme.value

@@ -1,6 +1,6 @@
 import { createColorGuide, createStyle } from "./color-guide";
 
-figma.showUI(__html__, { width: 300, height: 200 })
+figma.showUI(__html__, { width: 260, height: 180 })
 
 const SQUARE_SPACING = 150
 const VERTICAL_THEME_SPACING = 200
@@ -38,7 +38,7 @@ figma.ui.onmessage = async msg => {
 
 	if (msg.type === 'create-styles') {
 
-		if(msg.createTheme === "all") {
+		if (msg.createTheme === "all") {
 			themes.push(themeDark, themeLight, themeAyuLight, themeDracula, themeNord)
 		} else if (msg.createTheme === "dark-plus") {
 			themes.push(themeDark)
@@ -65,6 +65,35 @@ figma.ui.onmessage = async msg => {
 			})
 
 			createColorGuide(colorThemeName, sortedColors, themeI)
+		})
+
+		figma.closePlugin()
+		return
+	}
+
+	if (msg.type === 'relink-styles') {
+			const objectsToRelink = []
+		function addToRelinkQueue(node: FrameNode) {
+			if (node.children) {
+				node.children.forEach(c => {
+					addToRelinkQueue(c as any)
+					if (c.name.startsWith('---')) {
+						objectsToRelink.push(c)
+					}
+				})
+			}
+		}
+		addToRelinkQueue(figma.currentPage.selection[0] as FrameNode)
+
+		objectsToRelink.forEach(node => {
+			if (node.name.startsWith('---')) {
+				const fullColorName = node.name.slice(3)
+				const matchNodes = figma.currentPage.findAll(n => n.name === '--' + fullColorName && n.parent.parent.name === msg.newThemeName)
+				const styleId = ((matchNodes[0] as FrameNode).children[0] as RectangleNode).fillStyleId;
+				if ('fillStyleId' in node) {
+					node.fillStyleId = styleId
+				}
+			}
 		})
 
 		figma.closePlugin()

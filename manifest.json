@@ -1,6 +1,6 @@
 {
-  "name": "Kalaid",
-  "id": "735586928355001993",
+  "name": "Kaleidocode",
+  "id": "736060893363678891",
   "api": "0.6.0",
   "main": "dist/code.js",
   "ui": "dist/ui.html"
