@@ -16,7 +16,22 @@ export function createColorGuide(colorThemeName: string, sortedColors, n: number
 		Math.ceil(sortedColors.length / COMPONENT_WRAP_COUNT) * (colorFrameHeight + gap) - gap
 	const guideFrameWidth = (colorFrameWidth + gap) * COMPONENT_WRAP_COUNT - gap
 
-	const xOffset = n * guideFrameWidth + (n - 1) * colorGuideSpacing
+	let xOffset = n * guideFrameWidth + (n - 1) * colorGuideSpacing
+
+	const colorStyle = figma.currentPage.children
+	const colorStyleCounter = colorStyle.length
+	let colorStylePosition = 0
+
+	figma.currentPage.children.forEach((c, index) => {
+		if (c.name.startsWith('--') && index === (colorStyleCounter - 2)) {
+			colorStylePosition = (c as FrameNode).x
+			xOffset = (colorStylePosition + colorGuideSpacing + guideFrameWidth) + colorGuideSpacing + guideFrameWidth
+			console.log(colorStylePosition)
+			console.log(guideFrameWidth)
+			console.log(gap)
+		}
+	})
+
 	const borderFrame = createBorderFrame(
 		colorThemeName,
 		guideFrameWidth,
@@ -30,6 +45,8 @@ export function createColorGuide(colorThemeName: string, sortedColors, n: number
 		guideFrameWidth,
 		guideFrameHeight
 	)
+	
+	
 
 	let colorFrameX = 0
 	let colorFrameY = 0
@@ -50,7 +67,7 @@ export function createColorGuide(colorThemeName: string, sortedColors, n: number
 		if (typeof item === 'string') {
       if (colorI !== 0) {
         colorFrameY += colorFrameHeight + gap * 10
-        colorFrameX = 0
+		colorFrameX += 0
       }
 
       createGroupLeadingBlock(item, colorFrameWidth, colorFrameHeight, innerGuideFrame, 0, colorFrameY)
