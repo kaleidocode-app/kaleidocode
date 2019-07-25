@@ -4,6 +4,8 @@ figma.showUI(__html__, { width: 260, height: 180 })
 
 const SQUARE_SPACING = 150
 const VERTICAL_THEME_SPACING = 200
+const themeIndicator = '--'
+const styleIndicator = '---'
 
 const themes = [
 	// require('../themes/dark.json5'),
@@ -78,7 +80,7 @@ figma.ui.onmessage = async msg => {
 		let themeList = <HTMLSelectElement>document.getElementById('themes')
 
 		nodes.forEach(node => {
-			if (node.type === "FRAME" && node.name.startsWith('--') && node.name.charAt(2) != "-" ){
+			if (node.type === "FRAME" && node.name.startsWith(themeIndicator) && node.name.charAt(2) != "-" ){
 				// console.log(node.name)
 				let themeId = node.name.substr(2)
 				let themeName = themeId.replace('-', ' ')
@@ -102,7 +104,7 @@ figma.ui.onmessage = async msg => {
 			if (node.children) {
 				node.children.forEach(c => {
 					addToRelinkQueue(c as any)
-					if (c.name.startsWith('---')) {
+					if (c.name.startsWith(styleIndicator)) {
 						objectsToRelink.push(c)
 					}
 				})
@@ -111,9 +113,9 @@ figma.ui.onmessage = async msg => {
 		addToRelinkQueue(figma.currentPage.selection[0] as FrameNode)
 
 		objectsToRelink.forEach(node => {
-			if (node.name.startsWith('---')) {
+			if (node.name.startsWith(styleIndicator)) {
 				const fullColorName = node.name.slice(3)
-				const matchNodes = figma.currentPage.findAll(n => n.name === '---' + fullColorName && n.parent.parent.name === '--' + msg.newThemeName)
+				const matchNodes = figma.currentPage.findAll(n => n.name === styleIndicator + fullColorName && n.parent.parent.name === themeIndicator + msg.newThemeName)
 				const styleId = ((matchNodes[0] as FrameNode).children[0] as RectangleNode).fillStyleId;
 				if ('fillStyleId' in node) {
 					node.fillStyleId = styleId
@@ -132,27 +134,30 @@ figma.ui.onmessage = async msg => {
 		}
 
 		const themeNodes = figma.currentPage.findAll(node => {
-			return node.name.startsWith('--') && node.type === 'FRAME'
+			return node.name.startsWith(styleIndicator) && node.type === 'FRAME'
 		}) as FrameNode[]
 
-		console.log(themeNodes)
 		const themes = {}
 
 		themeNodes.forEach(t => {
-			const themeColorName = t.parent.parent.name
-			const fullColorName = themeColorName + ' / ' + t.name.slice(2)
+			let themeColorName = t.parent.parent.name
+			if(themeColorName.startsWith(themeIndicator)){
+				themeColorName = themeColorName.substr(2)
+			}
+			const fullColorName = themeColorName + ' / ' + t.name.slice(3)
+
 			if (!themes[themeColorName]) {
+				
 				themes[themeColorName] = {}
 			}
+			
 
 			if (!themes[themeColorName][fullColorName]) {
 				themes[themeColorName][fullColorName] = {}
 			}
-
 			themes[themeColorName][fullColorName] = (t.children[0] as RectangleNode).fillStyleId
 		})
 
-		console.log(themes)
 
 		const selection = figma.currentPage.selection[0]
 		if (selection.type !== 'GROUP' && selection.type !== 'FRAME') {
@@ -194,7 +199,7 @@ figma.ui.onmessage = async msg => {
 		}
 
 		const themeNodes = figma.currentPage.findAll(node => {
-			return node.name.startsWith('--') && node.type === 'GROUP'
+			return node.name.startsWith(themeIndicator) && node.type === 'GROUP'
 		}) as FrameNode[]
 
 		const themes = {}
@@ -246,21 +251,4 @@ figma.ui.onmessage = async msg => {
 		figma.closePlugin()
 		return
 	}
-
-	// Make sure to close the plugin when you're done. Otherwise the plugin will
-	// keep running, which shows the cancel button at the bottom of the screen.
-	// figma.closePlugin()
 }
-
-function createRect(colorTheme: string, colorName: string, xOffset: number, yOffset: number) {
-	const layerName = colorTheme + ' / ' + colorName
-
-	const rect = figma.createRectangle()
-	rect.x = xOffset
-	rect.y = yOffset
-	rect.name = layerName
-	figma.currentPage.appendChild(rect)
-
-	return rect
-}
-
