@@ -21,6 +21,10 @@ document.getElementById('create-custom').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'create-custom', newThemeCode } }, '*')
 }
 
+// document.getElementById('load-themes').onclick = () => {
+//   parent.postMessage({ pluginMessage: { type: 'load-themes'} }, '*')
+// }
+
 const tabButtonGenerate = document.getElementById('tab-button-generate')
 const tabButtonTheme = document.getElementById('tab-button-theme')
 const tabButtonCreate = document.getElementById('tab-button-create')
@@ -58,4 +62,5 @@ tabButtonCreate.onclick = function() {
   addActive(tabButtonCreate, tabContentCreate)
 }
 
-tabButtonGenerate.click()
+tabButtonTheme.click()
+// document.getElementById('load-themes').click()

@@ -73,6 +73,9 @@
   a {
     color: #18a0fb;
   }
+  a#load-themes {
+    margin-bottom: 8px;
+  }
   button {
     outline: none;
     margin-right: 4px;
@@ -172,13 +175,14 @@
   </div>
   
   <div id="contentTheme" class="tabContent">
-    <select id="themes">
+    <select id="themes" name="themes">
       <option value="dark-plus">Dark</option>
       <option value="light-plus">Light</option>
       <option value="ayu-light">Ayu Light</option>
       <option value="dracula">Dracula</option>
       <option value="nord">Nord</option>
     </select>
+    <!-- <a id="load-themes" href="#">Load themes</a> -->
     <div class="buttons">
       <button class="button-primary" id="switch-styles">Switch Styles</button>
       <button class="button-secondary" id="relink-styles">Relink Styles</button>

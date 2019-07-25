@@ -8,6 +8,8 @@ const labelFrameHeight = 71
 const colorFrameHeight = rectHeight + hexFrameHeight + labelFrameHeight
 const gap = 20
 const borderSize = 192
+const themeIndicator = '--'
+const styleIndicator = '---'
 
 export function createColorGuide(colorThemeName: string, sortedColors, n: number) {
 	const guideFrameHeight =
@@ -67,7 +69,7 @@ export function createColorGuide(colorThemeName: string, sortedColors, n: number
 			const { groupName, colorName } = getColorNames(colorThemeName + ' / ' + fullColorName)
 
 			const colorFrame = createColorFrame(
-				'--' + fullColorName,
+				styleIndicator + fullColorName,
 				innerGuideFrame,
 				colorFrameWidth,
 				colorFrameHeight,
@@ -244,7 +246,7 @@ export function createColorGuide(colorThemeName: string, sortedColors, n: number
 //create border frame
 function createBorderFrame(name, guideFrameWidth, guideFrameHeight, borderSize, x) {
 	var borderFrame = figma.createFrame()
-	borderFrame.name = name
+	borderFrame.name = themeIndicator + name
 	borderFrame.resizeWithoutConstraints(guideFrameWidth + borderSize, guideFrameHeight + borderSize)
 	borderFrame.backgrounds = [
 		{
@@ -400,7 +402,7 @@ function createLabelFrame(colorFrame, rect, hexFrame, labelFrameHeight) {
 function createLabel(labelFrame, fullColorName: string) {
 	let colorGroup: string, colorName: string
 	if (!fullColorName.includes('.')) {
-		colorGroup = '--'
+		colorGroup = styleIndicator
 		colorName = fullColorName
 	} else {
 		;[colorGroup, colorName] = fullColorName.split('.')
@@ -469,7 +471,7 @@ function getColorNames(fullName: string) {
 
 	let groupName: string, colorName: string
 	if (!fullColorName.includes('.')) {
-		groupName = '--'
+		groupName = styleIndicator
 		colorName = fullColorName
 	} else {
 		;[groupName, colorName] = fullColorName.split('.')

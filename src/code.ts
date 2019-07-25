@@ -71,8 +71,33 @@ figma.ui.onmessage = async msg => {
 		return
 	}
 
+	if(msg.type === 'load-themes'){
+		const nodes = figma.currentPage.findAll()
+		console.log(figma.viewport)
+		
+		let themeList = <HTMLSelectElement>document.getElementById('themes')
+
+		nodes.forEach(node => {
+			if (node.type === "FRAME" && node.name.startsWith('--') && node.name.charAt(2) != "-" ){
+				// console.log(node.name)
+				let themeId = node.name.substr(2)
+				let themeName = themeId.replace('-', ' ')
+				themeName = themeName.replace(/(?:_| |\b)(\w)/g, function (p1) { return p1.toUpperCase() })
+				console.log(themeName)
+
+				
+				// add options to select dropdown
+				let option = document.createElement('option')
+				option.text = themeName
+				option.value = themeId
+				themeList.add(option, 0);
+	
+			}
+		})
+	}
+
 	if (msg.type === 'relink-styles') {
-			const objectsToRelink = []
+		const objectsToRelink = []
 		function addToRelinkQueue(node: FrameNode) {
 			if (node.children) {
 				node.children.forEach(c => {
@@ -88,7 +113,7 @@ figma.ui.onmessage = async msg => {
 		objectsToRelink.forEach(node => {
 			if (node.name.startsWith('---')) {
 				const fullColorName = node.name.slice(3)
-				const matchNodes = figma.currentPage.findAll(n => n.name === '--' + fullColorName && n.parent.parent.name === msg.newThemeName)
+				const matchNodes = figma.currentPage.findAll(n => n.name === '---' + fullColorName && n.parent.parent.name === '--' + msg.newThemeName)
 				const styleId = ((matchNodes[0] as FrameNode).children[0] as RectangleNode).fillStyleId;
 				if ('fillStyleId' in node) {
 					node.fillStyleId = styleId
