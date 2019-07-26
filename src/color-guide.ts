@@ -18,19 +18,28 @@ export function createColorGuide(colorThemeName: string, sortedColors, n: number
 
 	let xOffset = n * guideFrameWidth + (n - 1) * colorGuideSpacing
 
-	const colorStyle = figma.currentPage.children
-	const colorStyleCounter = colorStyle.length
-	let colorStylePosition = 0
+	let stylesCount = []
+	let xLastStyle = 0
 
-	figma.currentPage.children.forEach((c, index) => {
-		if (c.name.startsWith('--') && index === (colorStyleCounter - 1)) {
-			colorStylePosition = (c as FrameNode).x
-			xOffset = (xOffset + guideFrameWidth + colorStylePosition + colorGuideSpacing) + colorGuideSpacing
-			console.log(colorStylePosition)
-			console.log(guideFrameWidth)
-			console.log(gap)
-		}
-	})
+	// when adding a single style, add to the end of guides
+	if(n === 0){
+		figma.currentPage.children.forEach(c => {
+			if (c.name.startsWith('--') && c.name.charAt(2) != "-") {
+				stylesCount.push(c.id)
+			}
+		})
+
+		let stylesCountTotal = (stylesCount.length - 1)
+		let lastStyleId = stylesCount[stylesCountTotal]
+
+		figma.currentPage.children.forEach(c => {
+			if (c.id === lastStyleId) {
+				console.log('Last one is ' + c.name)
+				xLastStyle = (c as FrameNode).x
+				xOffset = (xOffset + guideFrameWidth + xLastStyle + colorGuideSpacing) + colorGuideSpacing
+			}
+		})
+	}
 
 	const borderFrame = createBorderFrame(
 		colorThemeName,
