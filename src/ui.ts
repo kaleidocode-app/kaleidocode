@@ -1,23 +1,37 @@
 document.getElementById('create-styles').onclick = () => {
+  document.getElementById('create-styles').innerText = "Generating..."
   const createTheme = (document.getElementById('generateThemes') as HTMLOptionElement).value
-  parent.postMessage({
-    pluginMessage: {
-      type: 'create-styles', createTheme } }, '*' )
+  setTimeout(function(){
+    parent.postMessage({pluginMessage: { type: 'create-styles', createTheme }}, '*')
+  }, 100)
 }
 
 document.getElementById('switch-styles').onclick = () => {
   const newThemeName = (document.getElementById('themes') as HTMLOptionElement).value
+  document.getElementById('swap-validation').classList.add('hidden')
   parent.postMessage({ pluginMessage: { type: 'switch-styles', newThemeName } }, '*')
 }
 
+document.getElementById('relink-styles').onclick = () => {
+  document.getElementById('relink-styles').innerText = "Relinking..."
+  document.getElementById('swap-validation').classList.add('hidden')
+  const newThemeName = (document.getElementById('themes') as HTMLOptionElement).value
+  setTimeout(function () {
+    parent.postMessage({ pluginMessage: { type: 'relink-styles', newThemeName } }, '*')
+  }, 100)
+}
+
 document.getElementById('create-custom').onclick = () => {
+  document.getElementById('create-custom').innerText = "Creating..."
   const newTheme = <any>(document.getElementById('custom-theme'))
   const newThemeCode = newTheme.value
-  parent.postMessage({ pluginMessage: { type: 'create-custom', newThemeCode } }, '*')
+  setTimeout(function () {
+    parent.postMessage({ pluginMessage: { type: 'create-custom', newThemeCode } }, '*')
+  }, 100)
 }
 
 document.getElementById('load-themes').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'load-themes'} }, '*')
+  parent.postMessage({ pluginMessage: { type: 'load-themes' } }, '*')
 }
 
 const tabButtonGenerate = document.getElementById('tab-button-generate')
@@ -30,7 +44,7 @@ const tabContentTheme = document.getElementById('contentTheme')
 const tabContentCreate = document.getElementById('contentCreate')
 const tabContentGuide = document.getElementById('contentGuide')
 
-function addActive(button, content){
+function addActive(button, content) {
   button.classList.add('active')
   content.classList.add('active')
 
@@ -39,24 +53,24 @@ function addActive(button, content){
   // parent.postMessage({ pluginMessage: { type: 'update-size', page } }, '*')
 }
 
-function removeActive(){
+function removeActive() {
   var activeItems = document.querySelectorAll('.active');
   [].forEach.call(activeItems, function (el) {
     el.classList.remove('active');
   });
 }
 
-tabButtonGenerate.onclick = function() {
+tabButtonGenerate.onclick = function () {
   removeActive()
   addActive(tabButtonGenerate, tabContentGenerate)
 }
 
-tabButtonTheme.onclick = function() {
+tabButtonTheme.onclick = function () {
   removeActive()
   addActive(tabButtonTheme, tabContentTheme)
 }
 
-tabButtonCreate.onclick = function() {
+tabButtonCreate.onclick = function () {
   removeActive()
   addActive(tabButtonCreate, tabContentCreate)
 }
@@ -65,15 +79,18 @@ tabButtonGenerate.click()
 document.getElementById('load-themes').click()
 
 let dropdown = <HTMLSelectElement>document.getElementById('themes')
-onmessage = (event) => {
+let validation = document.getElementById('swap-validation')
 
-  if (event.data.pluginMessage.type == 'loadThemes') {
-    
-    let themeNames = event.data.pluginMessage.themeNames[0]
-    if (themeNames.length > 0){
+onmessage = (event) => {
+  const pluginMessage = event.data.pluginMessage
+  if (pluginMessage.type == 'loadThemes') {
+
+    let themeNames = pluginMessage.themeNames[0]
+    if (themeNames.length > 0) {
       // Remove placeholder item
       dropdown.options[0] = null
       document.getElementById('switch-styles').classList.remove('disabled')
+      document.getElementById('relink-styles').classList.remove('disabled')
 
       themeNames.forEach((t: any, index: number) => {
         // add options to select dropdown
@@ -87,6 +104,22 @@ onmessage = (event) => {
       })
     }
 
+  }
+
+  if (pluginMessage.type === 'switchStyles' && pluginMessage.selectionEmpty == true) {
+      validation.classList.remove('hidden')
+      validation.innerText = "Error: Please select an item to swap"
+      document.getElementById('switch-styles').innerText = "Swap Theme"
+  }
+
+  if (pluginMessage.type === 'relinkStyles' && pluginMessage.complete == true) {
+    document.getElementById('relink-styles').innerText = "Relink Styles"
+  }
+
+  if (pluginMessage.type === 'relinkStyles' && pluginMessage.selectionEmpty == true) {
+    validation.classList.remove('hidden')
+    validation.innerText = "Error: Please select an item to swap"
+    document.getElementById('relink-styles').innerText = "Relink Styles"
   }
 
 }

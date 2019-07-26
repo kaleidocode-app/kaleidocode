@@ -98,12 +98,18 @@
     border-color: #333;
     background-color: transparent;
   }
-  button.button-secondary:focus{
+  button.button-secondary:focus {
     border-color: #18a0fb;
   }
   button.disabled {
     pointer-events: none;
     background-color: rgba(0, 0, 0, 0.3);
+  }
+  button.button-secondary.disabled {
+    pointer-events: none;
+    color: rgba(0, 0, 0, 0.3);
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.3);
   }
   #content {
     display: flex;
@@ -159,6 +165,15 @@
   #load-themes {
     display: none;
   }
+  #swap-validation {
+    color: #f24822;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+  #swap-validation.hidden {
+    display: none;
+  }
 </style>
 
 <div id="content">
@@ -179,18 +194,20 @@
     </select>
 
     <div class="buttons">
-      <button class="button-primary" id="create-styles">Generate Styles</button>
+      <button class="button-primary" id="create-styles">Generate Themes</button>
     </div>
   </div>
 
   <div id="contentTheme" class="tabContent">
-    <select id="themes" name="themes" >
+    <select id="themes" name="themes">
       <option value="" disabled selected>No styles found</option>
     </select>
     <a id="load-themes" href="#">Load themes</a>
     <div class="buttons">
-      <button class="button-primary disabled" id="switch-styles">Swap Styles</button>
+      <button class="button-primary disabled" id="switch-styles">Swap Theme</button>
+      <button class="button-secondary disabled" id="relink-styles">Relink Theme</button>
     </div>
+    <p id="swap-validation" class="hidden"></p>
   </div>
 
   <div id="contentCreate" class="tabContent">
@@ -501,7 +518,7 @@
 }
     </textarea>
     <div class="buttons">
-      <button class="button-primary" id="create-custom">Create Custom Style</button>
+      <button class="button-primary" id="create-custom">Create Custom Theme</button>
     </div>
   </div>
 </div>

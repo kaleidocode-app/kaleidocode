@@ -92,8 +92,10 @@ figma.ui.onmessage = async msg => {
 	if (msg.type === 'switch-styles') {
 
 		if (figma.currentPage.selection.length <= 0) {
+			figma.ui.postMessage({ type: 'switchStyles', selectionEmpty: true });
 			return
 		}
+
 
 		const themeNodes = figma.currentPage.findAll(node => {
 			return node.name.startsWith(styleIndicator) && node.type === 'FRAME'
@@ -152,6 +154,41 @@ figma.ui.onmessage = async msg => {
 			}
 		})
 
+		return
+	}
+
+	if (msg.type === 'relink-styles') {
+
+		if (figma.currentPage.selection.length <= 0) {
+			figma.ui.postMessage({ type: 'relinkStyles', selectionEmpty: true });
+			return
+		}
+
+		const objectsToRelink = []
+		function addToRelinkQueue(node: FrameNode) {
+			if (node.children) {
+				node.children.forEach(c => {
+					addToRelinkQueue(c as any)
+					if (c.name.startsWith(styleIndicator)) {
+						objectsToRelink.push(c)
+					}
+				})
+			}
+		}
+		addToRelinkQueue(figma.currentPage.selection[0] as FrameNode)
+
+		objectsToRelink.forEach(node => {
+			if (node.name.startsWith(styleIndicator)) {
+				const fullColorName = node.name.slice(3)
+				const matchNodes = figma.currentPage.findAll(n => n.name === styleIndicator + fullColorName && n.parent.parent.name === themeIndicator + msg.newThemeName)
+				const styleId = ((matchNodes[0] as FrameNode).children[0] as RectangleNode).fillStyleId;
+				if ('fillStyleId' in node) {
+					node.fillStyleId = styleId
+				}
+			}
+		})
+
+		figma.ui.postMessage({ type: 'relinkStyles', complete: true });
 		return
 	}
 
