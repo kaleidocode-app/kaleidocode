@@ -151,6 +151,9 @@
   .tabContent.active {
     display: flex;
   }
+  #load-themes {
+    display: none;
+  }
 </style>
 
 <div id="content">
@@ -177,13 +180,13 @@
 
   <div id="contentTheme" class="tabContent">
     <select id="themes" name="themes">
-      <option value="dark-plus">Dark</option>
+      <!-- <option value="dark-plus">Dark</option>
       <option value="light-plus">Light</option>
       <option value="ayu-light">Ayu Light</option>
       <option value="dracula">Dracula</option>
-      <option value="nord">Nord</option>
+      <option value="nord">Nord</option> -->
     </select>
-    <!-- <a id="load-themes" href="#">Load themes</a> -->
+    <a id="load-themes" href="#">Load themes</a>
     <div class="buttons">
       <button class="button-primary" id="switch-styles">Switch Styles</button>
       <button class="button-secondary" id="relink-styles">Relink Styles</button>

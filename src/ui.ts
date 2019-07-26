@@ -21,9 +21,10 @@ document.getElementById('create-custom').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'create-custom', newThemeCode } }, '*')
 }
 
-// document.getElementById('load-themes').onclick = () => {
-//   parent.postMessage({ pluginMessage: { type: 'load-themes'} }, '*')
-// }
+document.getElementById('load-themes').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'load-themes'} }, '*')
+  
+}
 
 const tabButtonGenerate = document.getElementById('tab-button-generate')
 const tabButtonTheme = document.getElementById('tab-button-theme')
@@ -67,3 +68,27 @@ tabButtonCreate.onclick = function() {
 }
 
 tabButtonGenerate.click()
+document.getElementById('load-themes').click()
+
+let dropdown = <HTMLSelectElement>document.getElementById('themes')
+onmessage = (event) => {
+
+  if (event.data.pluginMessage.type == 'loadThemes') {
+    
+    let themeNames = event.data.pluginMessage.themeNames[0]
+    console.log(themeNames)
+    themeNames.forEach((t:any, index:number) => {
+      
+        // add options to select dropdown
+        let option = document.createElement('option')
+        let name = t
+        name = name.replace(/-+/g, ' ')
+        name = name.replace(/\b\w/g, (l:any) => l.toUpperCase())
+				option.text = name
+				option.value = t
+				dropdown.add(option, index);
+    })
+
+  }
+
+}

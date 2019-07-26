@@ -26,6 +26,8 @@ const themeAyuLight = require('../themes/ayu-light.json5')
 const themeDracula = require('../themes/dracula.json5')
 const themeNord = require('../themes/nord.json5')
 
+let styleThemes = []
+
 figma.ui.onmessage = async msg => {
 	const fonts = [
 		{ family: 'Roboto', style: 'Regular' },
@@ -74,28 +76,15 @@ figma.ui.onmessage = async msg => {
 	}
 
 	if(msg.type === 'load-themes'){
-		const nodes = figma.currentPage.findAll()
-		console.log(figma.viewport)
-		
-		let themeList = <HTMLSelectElement>document.getElementById('themes')
-
-		nodes.forEach(node => {
-			if (node.type === "FRAME" && node.name.startsWith(themeIndicator) && node.name.charAt(2) != "-" ){
-				// console.log(node.name)
-				let themeId = node.name.substr(2)
-				let themeName = themeId.replace('-', ' ')
-				themeName = themeName.replace(/(?:_| |\b)(\w)/g, function (p1) { return p1.toUpperCase() })
-				console.log(themeName)
-
-				
-				// add options to select dropdown
-				let option = document.createElement('option')
-				option.text = themeName
-				option.value = themeId
-				themeList.add(option, 0);
-	
+		figma.currentPage.children.forEach(c => {
+			if (c.name.startsWith('--') && c.name.charAt(2) != "-") {
+				let themeName = c.name.substr(2)
+				styleThemes.push(themeName)
 			}
 		})
+
+		// send event to HTML page
+		figma.ui.postMessage({ type: 'loadThemes', themeNames: [styleThemes] });
 	}
 
 	if (msg.type === 'relink-styles') {
