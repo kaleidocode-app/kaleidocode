@@ -10,11 +10,6 @@ document.getElementById('switch-styles').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'switch-styles', newThemeName } }, '*')
 }
 
-document.getElementById('relink-styles').onclick = () => {
-  const newThemeName = (document.getElementById('themes') as HTMLOptionElement).value
-  parent.postMessage({ pluginMessage: { type: 'relink-styles', newThemeName } }, '*')
-}
-
 document.getElementById('create-custom').onclick = () => {
   const newTheme = <any>(document.getElementById('custom-theme'))
   const newThemeCode = newTheme.value
@@ -23,7 +18,6 @@ document.getElementById('create-custom').onclick = () => {
 
 document.getElementById('load-themes').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'load-themes'} }, '*')
-  
 }
 
 const tabButtonGenerate = document.getElementById('tab-button-generate')
@@ -76,18 +70,22 @@ onmessage = (event) => {
   if (event.data.pluginMessage.type == 'loadThemes') {
     
     let themeNames = event.data.pluginMessage.themeNames[0]
-    console.log(themeNames)
-    themeNames.forEach((t:any, index:number) => {
-      
+    if (themeNames.length > 0){
+      // Remove placeholder item
+      dropdown.options[0] = null
+      document.getElementById('switch-styles').classList.remove('disabled')
+
+      themeNames.forEach((t: any, index: number) => {
         // add options to select dropdown
         let option = document.createElement('option')
         let name = t
         name = name.replace(/-+/g, ' ')
-        name = name.replace(/\b\w/g, (l:any) => l.toUpperCase())
-				option.text = name
-				option.value = t
-				dropdown.add(option, index);
-    })
+        name = name.replace(/\b\w/g, (l: any) => l.toUpperCase())
+        option.text = name
+        option.value = t
+        dropdown.add(option, index);
+      })
+    }
 
   }
 

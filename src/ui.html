@@ -40,11 +40,10 @@
     height: auto;
   }
 
-  html {
+  body {
     color: #333;
-    font-size: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-size: 11px;
+    font-family: Inter, Roboto, sans-serif;
   }
 
   input,
@@ -83,13 +82,14 @@
     background-color: #18a0fb;
     font-weight: 500;
     text-align: center;
-    min-width: 80px;
+    min-width: 72px;
     max-width: 200px;
-    padding: 8px 12px;
-    border: 1px solid transparent;
+    padding: 7px 10px;
+    border: 2px solid transparent;
     border-radius: 6px;
   }
   button:focus {
+    border-width: 2px;
     border-color: rgba(0, 0, 0, 0.3);
   }
   button.button-secondary {
@@ -97,6 +97,13 @@
     color: #333;
     border-color: #333;
     background-color: transparent;
+  }
+  button.button-secondary:focus{
+    border-color: #18a0fb;
+  }
+  button.disabled {
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.3);
   }
   #content {
     display: flex;
@@ -115,9 +122,6 @@
     flex-grow: 0;
     flex-shrink: 0;
   }
-  #loadThemes {
-    margin-top: 8px;
-  }
 
   .tabs {
     display: flex;
@@ -131,15 +135,16 @@
   }
 
   .tabs li a {
-    color: #b3b3b3;
-    font-weight: 500;
+    color: rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+    letter-spacing: 0.005em;
     text-decoration: none;
     padding-right: 4px;
   }
 
   .tabs li .active {
-    color: #333;
-    font-weight: 600;
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: 700;
   }
 
   .tabContent {
@@ -158,38 +163,33 @@
 
 <div id="content">
   <ul class="tabs">
-    <li><a class="tab" id="tab-button-generate" href="#">Create</a></li>
-    <li><a class="tab" id="tab-button-theme" href="#">Theme</a></li>
-    <li><a class="tab" id="tab-button-create" href="#">Custom</a></li>
+    <li><a class="tab" id="tab-button-generate" href="#">Generate</a></li>
+    <li><a class="tab" id="tab-button-theme" href="#">Swap</a></li>
+    <li><a class="tab" id="tab-button-create" href="#">Create</a></li>
   </ul>
 
   <div id="contentGenerate" class="tabContent">
     <select id="generateThemes">
-      <option value="all">All Themes</option>
-      <option value="dark-plus">Dark</option>
-      <option value="light-plus">Light</option>
+      <option value="all">All themes</option>
+      <option value="dark-plus">Dark Plus</option>
+      <option value="light-plus">Light Plus</option>
       <option value="ayu-light">Ayu Light</option>
       <option value="dracula">Dracula</option>
       <option value="nord">Nord</option>
     </select>
 
     <div class="buttons">
-      <button class="button-primary" id="create-styles">Create Styles</button>
+      <button class="button-primary" id="create-styles">Generate Styles</button>
     </div>
   </div>
 
   <div id="contentTheme" class="tabContent">
-    <select id="themes" name="themes">
-      <!-- <option value="dark-plus">Dark</option>
-      <option value="light-plus">Light</option>
-      <option value="ayu-light">Ayu Light</option>
-      <option value="dracula">Dracula</option>
-      <option value="nord">Nord</option> -->
+    <select id="themes" name="themes" >
+      <option value="" disabled selected>No styles found</option>
     </select>
     <a id="load-themes" href="#">Load themes</a>
     <div class="buttons">
-      <button class="button-primary" id="switch-styles">Switch Styles</button>
-      <button class="button-secondary" id="relink-styles">Relink Styles</button>
+      <button class="button-primary disabled" id="switch-styles">Swap Styles</button>
     </div>
   </div>
 

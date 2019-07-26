@@ -1,6 +1,6 @@
 import { createColorGuide, createStyle } from "./color-guide";
 
-figma.showUI(__html__, { width: 260, height: 230 })
+figma.showUI(__html__, { width: 260, height: 200 })
 
 const SQUARE_SPACING = 150
 const VERTICAL_THEME_SPACING = 200
@@ -56,6 +56,8 @@ figma.ui.onmessage = async msg => {
 			themes.push(themeNord)
 		}
 
+		themes.reverse()
+
 		themes.reverse().forEach((theme, themeI) => {
 			const themeColors = theme.colors
 			const colorThemeName = theme.name.toLowerCase()
@@ -85,35 +87,6 @@ figma.ui.onmessage = async msg => {
 
 		// send event to HTML page
 		figma.ui.postMessage({ type: 'loadThemes', themeNames: [styleThemes] });
-	}
-
-	if (msg.type === 'relink-styles') {
-		const objectsToRelink = []
-		function addToRelinkQueue(node: FrameNode) {
-			if (node.children) {
-				node.children.forEach(c => {
-					addToRelinkQueue(c as any)
-					if (c.name.startsWith(styleIndicator)) {
-						objectsToRelink.push(c)
-					}
-				})
-			}
-		}
-		addToRelinkQueue(figma.currentPage.selection[0] as FrameNode)
-
-		objectsToRelink.forEach(node => {
-			if (node.name.startsWith(styleIndicator)) {
-				const fullColorName = node.name.slice(3)
-				const matchNodes = figma.currentPage.findAll(n => n.name === styleIndicator + fullColorName && n.parent.parent.name === themeIndicator + msg.newThemeName)
-				const styleId = ((matchNodes[0] as FrameNode).children[0] as RectangleNode).fillStyleId;
-				if ('fillStyleId' in node) {
-					node.fillStyleId = styleId
-				}
-			}
-		})
-
-		figma.closePlugin()
-		return
 	}
 
 	if (msg.type === 'switch-styles') {
