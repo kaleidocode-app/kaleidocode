@@ -181,13 +181,16 @@
   #swap-validation.hidden {
     display: none;
   }
+  #switch-styles {
+    display: none;
+  }
 </style>
 
 <div id="content">
   <ul class="tabs">
     <li><a class="tab" id="tab-button-generate" href="#">Generate</a></li>
-    <li><a class="tab" id="tab-button-theme" href="#">Swap</a></li>
     <li><a class="tab" id="tab-button-create" href="#">Create</a></li>
+    <li><a class="tab" id="tab-button-theme" href="#">Swap</a></li>
   </ul>
 
   <div id="contentGenerate" class="tabContent">
@@ -219,7 +222,7 @@
     <a id="load-themes" href="#">Load themes</a>
     <div class="buttons">
       <button class="button-primary disabled" id="switch-styles">Swap Theme</button>
-      <button class="button-secondary disabled" id="relink-styles">Relink Theme</button>
+      <button class="button-primary disabled" id="relink-styles">Swap Theme</button>
     </div>
     <p id="swap-validation" class="hidden"></p>
   </div>

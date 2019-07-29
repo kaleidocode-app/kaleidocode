@@ -18,7 +18,7 @@ document.getElementById('switch-styles').onclick = () => {
 }
 
 document.getElementById('relink-styles').onclick = () => {
-  document.getElementById('relink-styles').innerText = "Relinking..."
+  document.getElementById('relink-styles').innerText = "Swapping..."
   document.getElementById('swap-validation').classList.add('hidden')
   const newThemeName = (document.getElementById('themes') as HTMLOptionElement).value
   setTimeout(function () {
@@ -122,13 +122,13 @@ onmessage = (event) => {
   }
 
   if (pluginMessage.type === 'relinkStyles' && pluginMessage.complete == true) {
-    document.getElementById('relink-styles').innerText = "Relink Styles"
+    document.getElementById('relink-styles').innerText = "Swap Theme"
   }
 
   if (pluginMessage.type === 'relinkStyles' && pluginMessage.selectionEmpty == true) {
     validation.classList.remove('hidden')
     validation.innerText = "Error: Please select an item to swap"
-    document.getElementById('relink-styles').innerText = "Relink Styles"
+    document.getElementById('relink-styles').innerText = "Swap Theme"
   }
 
 }
