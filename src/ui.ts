@@ -1,8 +1,13 @@
 document.getElementById('create-styles').onclick = () => {
   document.getElementById('create-styles').innerText = "Generating..."
-  const createTheme = (document.getElementById('generateThemes') as HTMLOptionElement).value
+  let themes = []
+  let themeItems = document.querySelectorAll('input[type=checkbox]:checked');
+  themeItems.forEach(t => {
+    themes.push(t.id)
+  })
+  
   setTimeout(function(){
-    parent.postMessage({pluginMessage: { type: 'create-styles', createTheme }}, '*')
+    parent.postMessage({ pluginMessage: { type: 'create-styles', themes }}, '*')
   }, 100)
 }
 

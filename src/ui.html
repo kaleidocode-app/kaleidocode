@@ -46,7 +46,6 @@
     font-family: Inter, Roboto, sans-serif;
   }
 
-  input,
   textarea {
     outline: none;
     box-sizing: border-box;
@@ -58,11 +57,16 @@
   textarea:focus {
     outline: 2px solid #18a0fb;
   }
-  .checkboxes,
+  input[type=checkbox]{
+    margin: 0 1px 6px 0;
+  }
+  input[type=checkbox]:focus {
+    outline: none;
+  }
   textarea,
   select {
     width: 100%;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
     white-space: nowrap;
   }
   textarea {
@@ -74,6 +78,9 @@
   }
   a#load-themes {
     margin-bottom: 8px;
+  }
+  .buttons {
+    margin-top: 8px;
   }
   button {
     outline: none;
@@ -184,14 +191,21 @@
   </ul>
 
   <div id="contentGenerate" class="tabContent">
-    <select id="generateThemes">
-      <option value="all">All themes</option>
-      <option value="dark-plus">Dark Plus</option>
-      <option value="light-plus">Light Plus</option>
-      <option value="ayu-light">Ayu Light</option>
-      <option value="dracula">Dracula</option>
-      <option value="nord">Nord</option>
-    </select>
+      <div class="checkboxes">
+        <input id="all" type="checkbox" name="all" onClick="toggle(this)" value="all" checked> Select All<br/>
+      </div>
+      <div class="checkboxes">
+        <input id="dark-plus" name="checkbox" type="checkbox" value="dark-plus" checked> Dark Plus
+      </div>
+      <div class="checkboxes">
+        <input id="light-plus" name="checkbox" type="checkbox" value="light-plus" checked> Light Plus
+      </div>
+      <div class="checkboxes">
+        <input id="ayu-light" name="checkbox" type="checkbox" value="ayu-light" checked> Ayu Light
+      </div>
+      <div class="checkboxes">
+        <input id="nord" name="checkbox" type="checkbox" value="nord" checked> Nord
+      </div>
 
     <div class="buttons">
       <button class="button-primary" id="create-styles">Generate Themes</button>
@@ -522,3 +536,13 @@
     </div>
   </div>
 </div>
+<script>
+  function toggle(source) {
+  let checkboxes = document.getElementsByName('checkbox');
+  console.log(checkboxes)
+  checkboxes.forEach(c => {
+    console.log(c)
+    c.checked = source.checked
+  })
+}
+</script>

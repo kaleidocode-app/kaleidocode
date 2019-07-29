@@ -23,7 +23,6 @@ const themes = [
 const themeDark = require('../themes/dark.json5')
 const themeLight = require('../themes/light.json5')
 const themeAyuLight = require('../themes/ayu-light.json5')
-const themeDracula = require('../themes/dracula.json5')
 const themeNord = require('../themes/nord.json5')
 
 let styleThemes = []
@@ -42,24 +41,34 @@ figma.ui.onmessage = async msg => {
 
 	if (msg.type === 'create-styles') {
 
-		if (msg.createTheme === "all") {
-			themes.push(themeDark, themeLight, themeAyuLight, themeDracula, themeNord)
-		} else if (msg.createTheme === "dark-plus") {
-			themes.push(themeDark)
-		} else if (msg.createTheme === "light-plus") {
-			themes.push(themeLight)
-		} else if (msg.createTheme === "ayu-light") {
-			themes.push(themeAyuLight)
-		} else if (msg.createTheme === "dracula") {
-			themes.push(themeDracula)
-		} else if (msg.createTheme === "nord") {
-			themes.push(themeNord)
+		if(msg.themes[0] === "all"){
+			themes.push(themeDark, themeLight, themeAyuLight, themeNord)
+		} else {
+			delete themes[0] // remove all item
+			let cThemes = msg.themes
+			cThemes.forEach((c:any) => {
+				if (c === "dark-plus") {
+					themes.push(themeDark)	
+				}
+				if (c === "light-plus") {
+					themes.push(themeLight)	
+				}
+				if (c === "ayu-light") {
+					themes.push(themeAyuLight)	
+				}
+				if (c === "nord") {
+					themes.push(themeNord)	
+				}
+			})
 		}
+		
 
 		themes.reverse()
 
 		themes.reverse().forEach((theme, themeI) => {
 			const themeColors = theme.colors
+			// console.log(themeColors)
+			console.log(theme)
 			const colorThemeName = theme.name.toLowerCase()
 
 			// sort object
