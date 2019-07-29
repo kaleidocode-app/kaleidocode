@@ -39,6 +39,10 @@ document.getElementById('load-themes').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'load-themes' } }, '*')
 }
 
+document.getElementById('all').onclick = () => {
+  toggleCheckboxes()
+}
+
 const tabButtonGenerate = document.getElementById('tab-button-generate')
 const tabButtonTheme = document.getElementById('tab-button-theme')
 const tabButtonCreate = document.getElementById('tab-button-create')
@@ -127,4 +131,23 @@ onmessage = (event) => {
     document.getElementById('relink-styles').innerText = "Relink Styles"
   }
 
+}
+
+function toggleCheckboxes() {
+  let checkboxes = document.getElementsByName('checkbox')
+  let toggleButton = <HTMLInputElement>document.getElementById('all')
+  if(toggleButton.checked){
+    console.log('Check everything')
+    checkboxes.forEach(c => {
+      let check = <HTMLInputElement>document.getElementById(c.id);
+      check.checked = true
+    })
+  } else {
+    console.log('Uncheck everything')
+    checkboxes.forEach(c => {
+      let check = <HTMLInputElement>document.getElementById(c.id);
+      check.checked = false
+    })
+    
+  }
 }

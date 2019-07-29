@@ -192,7 +192,7 @@
 
   <div id="contentGenerate" class="tabContent">
       <div class="checkboxes">
-        <input id="all" type="checkbox" name="all" onClick="toggle(this)" value="all" checked> Select All<br/>
+        <input id="all" type="checkbox" name="all" value="all" checked> Select All<br/>
       </div>
       <div class="checkboxes">
         <input id="dark-plus" name="checkbox" type="checkbox" value="dark-plus" checked> Dark Plus
@@ -536,13 +536,3 @@
     </div>
   </div>
 </div>
-<script>
-  function toggle(source) {
-  let checkboxes = document.getElementsByName('checkbox');
-  console.log(checkboxes)
-  checkboxes.forEach(c => {
-    console.log(c)
-    c.checked = source.checked
-  })
-}
-</script>
