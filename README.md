@@ -1,7 +1,7 @@
 <div align="center">
     
 <img align="center" width="50%" src="https://user-images.githubusercontent.com/35271042/62098637-0f8c1300-b240-11e9-8fbc-f196a13ffc70.png">
-        
+<hr>
 A Figma plugin that allows you to convert VS Code themes to Figma color libraries, swap and relink themes, and create new VS Code themes from scratch
 
 <img src="https://user-images.githubusercontent.com/35271042/62098874-19fadc80-b241-11e9-991d-24ff84b9b06a.png" />
