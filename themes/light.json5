@@ -1,6 +1,6 @@
 {
 	"$schema": "vscode://schemas/color-theme",
-	"name": "light-plus",
+	"name": "light-default",
 	"type": "light",
 	"colors": {
 		"activityBarBadge.background": "#007acc",

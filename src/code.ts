@@ -1,24 +1,11 @@
-import { createColorGuide, createStyle } from "./color-guide";
+import { createColorGuide } from "./color-guide";
 
 figma.showUI(__html__, { width: 260, height: 200 })
 
-const SQUARE_SPACING = 150
-const VERTICAL_THEME_SPACING = 200
 const themeIndicator = '--'
 const styleIndicator = '---'
 
-const themes = [
-	// require('../themes/dark.json5'),
-	// require('../themes/light.json5'),
-	// require('../themes/nord.json5'),
-	// require('../themes/material-palenight.json5')
-	// require('../themes/material-light.json5'),
-	// require('../themes/material-ocean.json5'),
-	// require('../themes/material.json5'),
-	// require('../themes/monokai.json5'),
-	// require('../themes/solarized-dark.json5'),
-	// require('../themes/solarized-light.json5')
-]
+const themes = []
 
 const themeDark = require('../themes/dark.json5')
 const themeLight = require('../themes/light.json5')
@@ -98,75 +85,7 @@ figma.ui.onmessage = async msg => {
 		figma.ui.postMessage({ type: 'loadThemes', themeNames: [styleThemes] });
 	}
 
-	if (msg.type === 'switch-styles') {
-
-		if (figma.currentPage.selection.length <= 0) {
-			figma.ui.postMessage({ type: 'switchStyles', selectionEmpty: true });
-			return
-		}
-
-
-		const themeNodes = figma.currentPage.findAll(node => {
-			return node.name.startsWith(styleIndicator) && node.type === 'FRAME'
-		}) as FrameNode[]
-
-		const themes = {}
-
-		themeNodes.forEach(t => {
-			let themeColorName = t.parent.parent.name
-			if(themeColorName.startsWith(themeIndicator)){
-				themeColorName = themeColorName.substr(2)
-			}
-			const fullColorName = themeColorName + ' / ' + t.name.slice(3)
-
-			if (!themes[themeColorName]) {
-				
-				themes[themeColorName] = {}
-			}
-			
-
-			if (!themes[themeColorName][fullColorName]) {
-				themes[themeColorName][fullColorName] = {}
-			}
-			themes[themeColorName][fullColorName] = (t.children[0] as RectangleNode).fillStyleId
-		})
-
-
-		const selection = figma.currentPage.selection[0]
-		if (selection.type !== 'GROUP' && selection.type !== 'FRAME') {
-			return
-		}
-
-		const objectsToUpdate = []
-
-		function addToUpdateQueue(node: FrameNode) {
-			if (node.children) {
-				node.children.forEach(c => {
-					addToUpdateQueue(c as any)
-					objectsToUpdate.push(c)
-				})
-			}
-		}
-		addToUpdateQueue(selection)
-
-		objectsToUpdate.forEach((c: RectangleNode) => {
-			const cStyle = figma.getStyleById(String(c.fillStyleId))
-
-			if (cStyle) {
-				const [themeName, colorName] = cStyle.name.split(' / ')
-				const newColorName = [msg.newThemeName, colorName].join(' / ')
-				const newStyleId = themes[msg.newThemeName][newColorName]
-
-				if (newStyleId) {
-					c.fillStyleId = newStyleId
-				}
-			}
-		})
-
-		return
-	}
-
-	if (msg.type === 'relink-styles') {
+	if (msg.type === 'swap-theme') {
 
 		if (figma.currentPage.selection.length <= 0) {
 			figma.ui.postMessage({ type: 'relinkStyles', selectionEmpty: true });
@@ -224,23 +143,4 @@ figma.ui.onmessage = async msg => {
 		return
 	}
 
-	// if (msg.type === 'update-size') {
-	// 	switch (msg.page) {
-	// 		case "create": {
-	// 			console.log("update custom");
-	// 			figma.ui.resize(260, 230)
-	// 			break;
-	// 		}
-	// 		case "theme": {
-	// 			console.log("Update theme");
-	// 			figma.ui.resize(260, 230)
-	// 			break;
-	// 		}
-	// 		case "generate": {
-	// 			console.log("Update create");
-	// 			figma.ui.resize(260, 230)
-	// 			break;
-	// 		}
-	// 	}
-	// }
 }

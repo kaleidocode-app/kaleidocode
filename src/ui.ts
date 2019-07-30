@@ -15,21 +15,15 @@ document.getElementById('create-styles').onclick = () => {
   }, 100)
 }
 
-document.getElementById('switch-styles').onclick = () => {
-  const newThemeName = (document.getElementById('themes') as HTMLOptionElement).value
-  document.getElementById('swap-validation').classList.add('hidden')
-  parent.postMessage({ pluginMessage: { type: 'switch-styles', newThemeName } }, '*')
-}
-
-document.getElementById('relink-styles').onclick = () => {
-  let icon = <HTMLElement>document.getElementById('relink-styles').querySelector('.icon-loader')
-  let text = <HTMLElement>document.getElementById('relink-styles').querySelector('.text')
+document.getElementById('swap-theme').onclick = () => {
+  let icon = <HTMLElement>document.getElementById('swap-theme').querySelector('.icon-loader')
+  let text = <HTMLElement>document.getElementById('swap-theme').querySelector('.text')
   icon.style.display = "block"
   text.style.display = "none"
   document.getElementById('swap-validation').classList.add('hidden')
   const newThemeName = (document.getElementById('themes') as HTMLOptionElement).value
   setTimeout(function () {
-    parent.postMessage({ pluginMessage: { type: 'relink-styles', newThemeName } }, '*')
+    parent.postMessage({ pluginMessage: { type: 'swap-theme', newThemeName } }, '*')
   }, 100)
 }
 
@@ -49,32 +43,26 @@ document.getElementById('load-themes').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'load-themes' } }, '*')
 }
 
-document.getElementById('all').onclick = () => {
+document.getElementById('select-all').onclick = () => {
   toggleCheckboxes()
 }
 
 const tabButtonGenerate = document.getElementById('tab-button-generate')
 const tabButtonTheme = document.getElementById('tab-button-theme')
 const tabButtonCreate = document.getElementById('tab-button-create')
-const tabButtonGuide = document.getElementById('tab-button-guide')
 
 const tabContentGenerate = document.getElementById('contentGenerate')
 const tabContentTheme = document.getElementById('contentTheme')
 const tabContentCreate = document.getElementById('contentCreate')
-const tabContentGuide = document.getElementById('contentGuide')
 
-function addActive(button, content) {
+function addActive(button:any, content:any) {
   button.classList.add('active')
   content.classList.add('active')
-
-  // let page = button.id
-  // page = page.substr(11)
-  // parent.postMessage({ pluginMessage: { type: 'update-size', page } }, '*')
 }
 
 function removeActive() {
   var activeItems = document.querySelectorAll('.active');
-  [].forEach.call(activeItems, function (el) {
+  [].forEach.call(activeItems, function (el:any) {
     el.classList.remove('active');
   });
 }
@@ -101,15 +89,16 @@ let dropdown = <HTMLSelectElement>document.getElementById('themes')
 let validation = document.getElementById('swap-validation')
 
 onmessage = (event) => {
+  
   const pluginMessage = event.data.pluginMessage
-  if (pluginMessage.type == 'loadThemes') {
 
+  // load themes
+  if (pluginMessage.type == 'loadThemes') {
     let themeNames = pluginMessage.themeNames[0]
     if (themeNames.length > 0) {
       // Remove placeholder item
       dropdown.options[0] = null
-      document.getElementById('switch-styles').classList.remove('disabled')
-      document.getElementById('relink-styles').classList.remove('disabled')
+      document.getElementById('swap-theme').classList.remove('disabled')
 
       themeNames.forEach((t: any, index: number) => {
         // add options to select dropdown
@@ -125,17 +114,19 @@ onmessage = (event) => {
 
   }
 
+  // when swap is complete
   if (pluginMessage.type === 'relinkStyles' && pluginMessage.complete == true) {
-    let icon = <HTMLElement>document.getElementById('relink-styles').querySelector('.icon-loader')
-    let text = <HTMLElement>document.getElementById('relink-styles').querySelector('.text')
+    let icon = <HTMLElement>document.getElementById('swap-theme').querySelector('.icon-loader')
+    let text = <HTMLElement>document.getElementById('swap-theme').querySelector('.text')
     icon.style.display = "none"
     text.style.display = "block"
   }
 
+  // when swap is missing selection
   if (pluginMessage.type === 'relinkStyles' && pluginMessage.selectionEmpty == true) {
     validation.classList.remove('hidden')
-    let icon = <HTMLElement>document.getElementById('relink-styles').querySelector('.icon-loader')
-    let text = <HTMLElement>document.getElementById('relink-styles').querySelector('.text')
+    let icon = <HTMLElement>document.getElementById('swap-theme').querySelector('.icon-loader')
+    let text = <HTMLElement>document.getElementById('swap-theme').querySelector('.text')
     icon.style.display = "none"
     text.style.display = "block"
   }
@@ -144,7 +135,7 @@ onmessage = (event) => {
 
 function toggleCheckboxes() {
   let checkboxes = document.getElementsByName('checkbox')
-  let toggleButton = <HTMLInputElement>document.getElementById('all')
+  let toggleButton = <HTMLInputElement>document.getElementById('select-all')
   if(toggleButton.checked){
     console.log('Check everything')
     checkboxes.forEach(c => {
