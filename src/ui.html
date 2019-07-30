@@ -53,35 +53,44 @@
     padding: 8px;
     border: 1px solid #e5e5e5;
   }
+
   input:focus,
   textarea:focus {
     outline: 2px solid #18a0fb;
   }
-  input[type=checkbox]{
+
+  input[type='checkbox'] {
     margin: 0 1px 6px 0;
   }
-  input[type=checkbox]:focus {
+
+  input[type='checkbox']:focus {
     outline: none;
   }
+
   textarea,
   select {
     width: 100%;
     margin-bottom: 4px;
     white-space: nowrap;
   }
+
   textarea {
     font-size: 10px;
     height: 100%;
   }
+
   a {
     color: #18a0fb;
   }
+
   a#load-themes {
     margin-bottom: 8px;
   }
+
   .buttons {
     margin-top: 8px;
   }
+
   button {
     outline: none;
     margin-right: 4px;
@@ -89,47 +98,58 @@
     background-color: #18a0fb;
     font-weight: 500;
     text-align: center;
-    min-width: 72px;
+    min-width: 60px;
     max-width: 200px;
     padding: 7px 10px;
     border: 2px solid transparent;
     border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center
   }
+
   button:focus {
     border-width: 2px;
     border-color: rgba(0, 0, 0, 0.3);
   }
+
   button.button-secondary {
     margin-left: auto;
     color: #333;
     border-color: #333;
     background-color: transparent;
   }
+
   button.button-secondary:focus {
     border-color: #18a0fb;
   }
+
   button.disabled {
     pointer-events: none;
     background-color: rgba(0, 0, 0, 0.3);
   }
+
   button.button-secondary.disabled {
     pointer-events: none;
     color: rgba(0, 0, 0, 0.3);
     background-color: transparent;
     border: 1px solid rgba(0, 0, 0, 0.3);
   }
+
   #content {
     display: flex;
     flex-direction: column;
     padding: 12px 20px;
     height: 100%;
   }
+
   .subheading {
     font-size: 80%;
     font-weight: 800;
     text-transform: uppercase;
     margin-bottom: 4px;
   }
+
   .buttons {
     display: flex;
     flex-grow: 0;
@@ -160,6 +180,15 @@
     font-weight: 700;
   }
 
+  .tabs li#help {
+    margin-right: 0;
+    margin-left: auto;
+  }
+
+  .tabs li a#tab-button-help svg * {
+    fill: rgba(0, 0, 0, 0.3);
+  }
+
   .tabContent {
     display: none;
     height: 100%;
@@ -169,20 +198,81 @@
   .tabContent.active {
     display: flex;
   }
+
   #load-themes {
     display: none;
   }
+
   #swap-validation {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+  }
+
+  #swap-validation p {
     color: #f24822;
     font-size: 11px;
     font-weight: 600;
-    margin-top: 12px;
+    margin-top: 2px;
   }
+
+  #swap-validation svg {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+  }
+
+  #swap-validation svg>* {
+    fill: #f24822;
+  }
+
   #swap-validation.hidden {
     display: none;
   }
+
   #switch-styles {
     display: none;
+  }
+
+  .icon-loader {
+    display: none;
+    width: 14px;
+    height: 14px;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .icon-loader * {
+    fill: white;
+  }
+
+  @-moz-keyframes spin {
+    from {
+      -moz-transform: rotate(0deg);
+    }
+
+    to {
+      -moz-transform: rotate(360deg);
+    }
+  }
+
+  @-webkit-keyframes spin {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+
+    to {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
   }
 </style>
 
@@ -191,27 +281,36 @@
     <li><a class="tab" id="tab-button-generate" href="#">Generate</a></li>
     <li><a class="tab" id="tab-button-create" href="#">Create</a></li>
     <li><a class="tab" id="tab-button-theme" href="#">Swap</a></li>
+    <li id="help">
+      <a class="tab" id="tab-button-help" href="https://www.kaleidocode.com/how-to-use" target="_blank">
+        <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 8H3V9H2V8ZM2.5 0.5C2.84375 0.5 3.16667 0.567708 3.46875 0.703125C3.77083 0.833333 4.03385 1.01302 4.25781 1.24219C4.48698 1.46615 4.66667 1.72917 4.79688 2.03125C4.93229 2.33333 5 2.65625 5 3C5 3.3125 4.95052 3.58594 4.85156 3.82031C4.7526 4.04948 4.6276 4.25781 4.47656 4.44531C4.33073 4.63281 4.17188 4.80469 4 4.96094C3.82812 5.11198 3.66667 5.26562 3.51562 5.42188C3.36979 5.57292 3.2474 5.73698 3.14844 5.91406C3.04948 6.08594 3 6.28125 3 6.5V7H2V6.5C2 6.1875 2.04948 5.91667 2.14844 5.6875C2.2474 5.45312 2.36979 5.24219 2.51562 5.05469C2.66667 4.86719 2.82812 4.69792 3 4.54688C3.17188 4.39062 3.33073 4.23698 3.47656 4.08594C3.6276 3.92969 3.7526 3.76562 3.85156 3.59375C3.95052 3.42188 4 3.22396 4 3C4 2.79167 3.96094 2.59635 3.88281 2.41406C3.80469 2.23177 3.69792 2.07292 3.5625 1.9375C3.42708 1.80208 3.26823 1.69531 3.08594 1.61719C2.90365 1.53906 2.70833 1.5 2.5 1.5C2.29167 1.5 2.09635 1.53906 1.91406 1.61719C1.73177 1.69531 1.57292 1.80208 1.4375 1.9375C1.30208 2.07292 1.19531 2.23177 1.11719 2.41406C1.03906 2.59635 1 2.79167 1 3H0C0 2.65625 0.0651042 2.33333 0.195312 2.03125C0.325521 1.72917 0.502604 1.46615 0.726562 1.24219C0.955729 1.01302 1.22135 0.833333 1.52344 0.703125C1.83073 0.567708 2.15625 0.5 2.5 0.5Z" fill="black" /></svg>
+      </a>
+    </li>
   </ul>
 
   <div id="contentGenerate" class="tabContent">
-      <div class="checkboxes">
-        <input id="all" type="checkbox" name="all" value="all" checked> Select All<br/>
-      </div>
-      <div class="checkboxes">
-        <input id="dark-plus" name="checkbox" type="checkbox" value="dark-plus" checked> Dark Plus
-      </div>
-      <div class="checkboxes">
-        <input id="light-plus" name="checkbox" type="checkbox" value="light-plus" checked> Light Plus
-      </div>
-      <div class="checkboxes">
-        <input id="ayu-light" name="checkbox" type="checkbox" value="ayu-light" checked> Ayu Light
-      </div>
-      <div class="checkboxes">
-        <input id="nord" name="checkbox" type="checkbox" value="nord" checked> Nord
-      </div>
+    <div class="checkboxes">
+      <input id="all" type="checkbox" name="all" value="all" checked /> Select All<br />
+    </div>
+    <div class="checkboxes">
+      <input id="dark-plus" name="checkbox" type="checkbox" value="dark-plus" checked /> Dark Plus
+    </div>
+    <div class="checkboxes">
+      <input id="light-plus" name="checkbox" type="checkbox" value="light-plus" checked /> Light
+      Plus
+    </div>
+    <div class="checkboxes">
+      <input id="ayu-light" name="checkbox" type="checkbox" value="ayu-light" checked /> Ayu Light
+    </div>
+    <div class="checkboxes">
+      <input id="nord" name="checkbox" type="checkbox" value="nord" checked /> Nord
+    </div>
 
     <div class="buttons">
-      <button class="button-primary" id="create-styles">Generate Themes</button>
+      <button class="button-primary" id="create-styles">
+        <svg class="icon-loader" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C8.73438 0 9.44271 0.0963542 10.125 0.289062C10.8073 0.476562 11.4453 0.744792 12.0391 1.09375C12.6328 1.4375 13.1719 1.85417 13.6562 2.34375C14.1458 2.82812 14.5625 3.36719 14.9062 3.96094C15.2552 4.55469 15.5234 5.19271 15.7109 5.875C15.9036 6.55729 16 7.26562 16 8C16 9.07812 15.7995 10.1016 15.3984 11.0703C14.9974 12.0339 14.4167 12.8958 13.6562 13.6562L12.2422 12.2422C12.8099 11.6745 13.2448 11.0286 13.5469 10.3047C13.849 9.57552 14 8.80729 14 8C14 7.44792 13.9271 6.91667 13.7812 6.40625C13.6406 5.89583 13.4401 5.41927 13.1797 4.97656C12.9193 4.52865 12.6068 4.1224 12.2422 3.75781C11.8776 3.39323 11.4714 3.08073 11.0234 2.82031C10.5807 2.5599 10.1042 2.35938 9.59375 2.21875C9.08333 2.07292 8.55208 2 8 2V0Z" fill="black" /></svg>
+        <p class="text">Generate Themes</p>
+      </button>
     </div>
   </div>
 
@@ -222,9 +321,14 @@
     <a id="load-themes" href="#">Load themes</a>
     <div class="buttons">
       <button class="button-primary disabled" id="switch-styles">Swap Theme</button>
-      <button class="button-primary disabled" id="relink-styles">Swap Theme</button>
+      <button class="button-primary disabled" id="relink-styles"><svg class="icon-loader" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C8.73438 0 9.44271 0.0963542 10.125 0.289062C10.8073 0.476562 11.4453 0.744792 12.0391 1.09375C12.6328 1.4375 13.1719 1.85417 13.6562 2.34375C14.1458 2.82812 14.5625 3.36719 14.9062 3.96094C15.2552 4.55469 15.5234 5.19271 15.7109 5.875C15.9036 6.55729 16 7.26562 16 8C16 9.07812 15.7995 10.1016 15.3984 11.0703C14.9974 12.0339 14.4167 12.8958 13.6562 13.6562L12.2422 12.2422C12.8099 11.6745 13.2448 11.0286 13.5469 10.3047C13.849 9.57552 14 8.80729 14 8C14 7.44792 13.9271 6.91667 13.7812 6.40625C13.6406 5.89583 13.4401 5.41927 13.1797 4.97656C12.9193 4.52865 12.6068 4.1224 12.2422 3.75781C11.8776 3.39323 11.4714 3.08073 11.0234 2.82031C10.5807 2.5599 10.1042 2.35938 9.59375 2.21875C9.08333 2.07292 8.55208 2 8 2V0Z" fill="black" /></svg>
+        <p class="text">Swap Theme</p>
+      </button>
     </div>
-    <p id="swap-validation" class="hidden"></p>
+    <div id="swap-validation" class="hidden">
+      <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10 0L20 18H0L10 0ZM9 11V7H11V11H9ZM9 13V15H11V13H9Z" fill="black" fill-opacity="0.8" /></svg>
+      <p>Error: Please select an item to swap</p>
+    </div>
   </div>
 
   <div id="contentCreate" class="tabContent">
@@ -535,7 +639,10 @@
 }
     </textarea>
     <div class="buttons">
-      <button class="button-primary" id="create-custom">Create Custom Theme</button>
+      <button class="button-primary" id="create-custom">
+        <svg class="icon-loader" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C8.73438 0 9.44271 0.0963542 10.125 0.289062C10.8073 0.476562 11.4453 0.744792 12.0391 1.09375C12.6328 1.4375 13.1719 1.85417 13.6562 2.34375C14.1458 2.82812 14.5625 3.36719 14.9062 3.96094C15.2552 4.55469 15.5234 5.19271 15.7109 5.875C15.9036 6.55729 16 7.26562 16 8C16 9.07812 15.7995 10.1016 15.3984 11.0703C14.9974 12.0339 14.4167 12.8958 13.6562 13.6562L12.2422 12.2422C12.8099 11.6745 13.2448 11.0286 13.5469 10.3047C13.849 9.57552 14 8.80729 14 8C14 7.44792 13.9271 6.91667 13.7812 6.40625C13.6406 5.89583 13.4401 5.41927 13.1797 4.97656C12.9193 4.52865 12.6068 4.1224 12.2422 3.75781C11.8776 3.39323 11.4714 3.08073 11.0234 2.82031C10.5807 2.5599 10.1042 2.35938 9.59375 2.21875C9.08333 2.07292 8.55208 2 8 2V0Z" fill="black" /></svg>
+        <p class="text">Create Custom Theme</p>
+      </button>
     </div>
   </div>
 </div>

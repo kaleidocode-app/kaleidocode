@@ -1,5 +1,9 @@
 document.getElementById('create-styles').onclick = () => {
-  document.getElementById('create-styles').innerText = "Generating..."
+  let icon = <HTMLElement>document.getElementById('create-styles').querySelector('.icon-loader')
+  let text = <HTMLElement>document.getElementById('create-styles').querySelector('.text')
+  icon.style.display = "block"
+  text.style.display = "none"
+
   let themes = []
   let themeItems = document.querySelectorAll('input[type=checkbox]:checked');
   themeItems.forEach(t => {
@@ -18,7 +22,10 @@ document.getElementById('switch-styles').onclick = () => {
 }
 
 document.getElementById('relink-styles').onclick = () => {
-  document.getElementById('relink-styles').innerText = "Swapping..."
+  let icon = <HTMLElement>document.getElementById('relink-styles').querySelector('.icon-loader')
+  let text = <HTMLElement>document.getElementById('relink-styles').querySelector('.text')
+  icon.style.display = "block"
+  text.style.display = "none"
   document.getElementById('swap-validation').classList.add('hidden')
   const newThemeName = (document.getElementById('themes') as HTMLOptionElement).value
   setTimeout(function () {
@@ -27,7 +34,10 @@ document.getElementById('relink-styles').onclick = () => {
 }
 
 document.getElementById('create-custom').onclick = () => {
-  document.getElementById('create-custom').innerText = "Creating..."
+  let icon = <HTMLElement>document.getElementById('create-custom').querySelector('.icon-loader')
+  let text = <HTMLElement>document.getElementById('create-custom').querySelector('.text')
+  icon.style.display = "block"
+  text.style.display = "none"
   const newTheme = <any>(document.getElementById('custom-theme'))
   const newThemeCode = newTheme.value
   setTimeout(function () {
@@ -115,20 +125,19 @@ onmessage = (event) => {
 
   }
 
-  if (pluginMessage.type === 'switchStyles' && pluginMessage.selectionEmpty == true) {
-      validation.classList.remove('hidden')
-      validation.innerText = "Error: Please select an item to swap"
-      document.getElementById('switch-styles').innerText = "Swap Theme"
-  }
-
   if (pluginMessage.type === 'relinkStyles' && pluginMessage.complete == true) {
-    document.getElementById('relink-styles').innerText = "Swap Theme"
+    let icon = <HTMLElement>document.getElementById('relink-styles').querySelector('.icon-loader')
+    let text = <HTMLElement>document.getElementById('relink-styles').querySelector('.text')
+    icon.style.display = "none"
+    text.style.display = "block"
   }
 
   if (pluginMessage.type === 'relinkStyles' && pluginMessage.selectionEmpty == true) {
     validation.classList.remove('hidden')
-    validation.innerText = "Error: Please select an item to swap"
-    document.getElementById('relink-styles').innerText = "Swap Theme"
+    let icon = <HTMLElement>document.getElementById('relink-styles').querySelector('.icon-loader')
+    let text = <HTMLElement>document.getElementById('relink-styles').querySelector('.text')
+    icon.style.display = "none"
+    text.style.display = "block"
   }
 
 }
