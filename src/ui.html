@@ -107,7 +107,9 @@
     align-items: center;
     justify-content: center
   }
-
+  button:hover {
+    cursor: pointer;
+  }
   button:focus {
     border-width: 2px;
     border-color: rgba(0, 0, 0, 0.3);
@@ -211,8 +213,10 @@
 
   #swap-validation p {
     color: #f24822;
+    font-style: normal;
+    font-weight: 500;
     font-size: 11px;
-    font-weight: 600;
+    line-height: 16px;
     margin-top: 2px;
   }
 
@@ -325,7 +329,7 @@
     </div>
     <div id="swap-validation" class="hidden">
       <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10 0L20 18H0L10 0ZM9 11V7H11V11H9ZM9 13V15H11V13H9Z" fill="black" fill-opacity="0.8" /></svg>
-      <p>Error: Please select an item to swap</p>
+      <p>Please select an item to swap</p>
     </div>
   </div>
 
