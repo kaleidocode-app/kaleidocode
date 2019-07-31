@@ -28,27 +28,27 @@ figma.ui.onmessage = async msg => {
 
 	if (msg.type === 'create-styles') {
 
-		if(msg.themes[0] === "all"){
+		if (msg.themes[0] === "all") {
 			themes.push(themeDark, themeLight, themeAyuLight, themeNord)
 		} else {
 			delete themes[0] // remove all item
 			let cThemes = msg.themes
-			cThemes.forEach((c:any) => {
+			cThemes.forEach((c: any) => {
 				if (c === "dark-plus") {
-					themes.push(themeDark)	
+					themes.push(themeDark)
 				}
 				if (c === "light-plus") {
-					themes.push(themeLight)	
+					themes.push(themeLight)
 				}
 				if (c === "ayu-light") {
-					themes.push(themeAyuLight)	
+					themes.push(themeAyuLight)
 				}
 				if (c === "nord") {
-					themes.push(themeNord)	
+					themes.push(themeNord)
 				}
 			})
 		}
-		
+
 
 		themes.reverse()
 
@@ -73,9 +73,9 @@ figma.ui.onmessage = async msg => {
 		return
 	}
 
-	if(msg.type === 'load-themes'){
+	if (msg.type === 'load-themes') {
 		figma.currentPage.children.forEach(c => {
-			if (c.name.startsWith('--') && c.name.charAt(2) != "-") {
+			if (c.name.startsWith(themeIndicator) && c.name.charAt(2) != "-") {
 				let themeName = c.name.substr(2)
 				styleThemes.push(themeName)
 			}
@@ -87,11 +87,13 @@ figma.ui.onmessage = async msg => {
 
 	if (msg.type === 'swap-theme') {
 
+		// stop if there is no slection
 		if (figma.currentPage.selection.length <= 0) {
 			figma.ui.postMessage({ type: 'relinkStyles', selectionEmpty: true });
 			return
 		}
 
+		// add current selection to relink que
 		const objectsToRelink = []
 		function addToRelinkQueue(node: FrameNode) {
 			if (node.children) {
@@ -105,14 +107,88 @@ figma.ui.onmessage = async msg => {
 		}
 		addToRelinkQueue(figma.currentPage.selection[0] as FrameNode)
 
+		// save current theme info
+		const theme = msg.newThemeName
+		let themeId = ''
+		let themeRef = []
+
+		for (let parent of figma.currentPage.children) {
+			let parentName = parent.name.slice(2)
+
+			if (parentName === theme) {
+				themeId = parent.id
+			}
+
+		}
+
+		// if nodes have a style name in the layer, add to theme reference
+		let parent = (figma.getNodeById(themeId) as FrameNode)
+		let children = (parent.children[0] as FrameNode).findAll()
+		children.forEach(c => {
+			if ((c.name.startsWith(styleIndicator) && c.type === "FRAME")) {
+				(c as FrameNode).findAll().forEach(c => {
+					if (c.name.startsWith(theme)) {
+						let cName = c.name
+						let cStyle = (c as RectangleNode).fillStyleId
+						themeRef[cName] = cStyle;
+					}
+				})
+			}
+		})
+
+		// iterate through each item to be linked and match them with theme reference items
 		objectsToRelink.forEach(node => {
-			if (node.name.startsWith(styleIndicator)) {
-				const fullColorName = node.name.slice(3)
-				const matchNodes = figma.currentPage.findAll(n => n.name === styleIndicator + fullColorName && n.parent.parent.name === themeIndicator + msg.newThemeName)
-				const styleId = ((matchNodes[0] as FrameNode).children[0] as RectangleNode).fillStyleId;
-				if ('fillStyleId' in node) {
-					node.fillStyleId = styleId
+			const unlinkedColorName = theme + ' / ' + node.name.slice(3)
+
+			// if objects to be relinked exist in theme reference
+			if (unlinkedColorName in themeRef) {
+
+				if (node.type === "RECTANGLE") {
+					let nodeToSwap = (node as RectangleNode)
+					nodeToSwap.fillStyleId = themeRef[unlinkedColorName]
+				} else if (node.type === "FRAME") {
+					let nodeToSwap = (node as FrameNode)
+					let childItems = nodeToSwap.children
+					childItems.forEach(c => {
+						if (c.type === "VECTOR") {
+							let nodeToSwap = (c as VectorNode)
+							nodeToSwap.fillStyleId = themeRef[unlinkedColorName]
+						} else if (c.type === "BOOLEAN_OPERATION") {
+							let nodeToSwap = (c as BooleanOperationNode)
+							nodeToSwap.fillStyleId = themeRef[unlinkedColorName]
+						} else if (c.type === "GROUP") {
+							let nodeToSwap = (c as FrameNode)
+							nodeToSwap.children.forEach(c => {
+								if (c.type === "VECTOR") {
+									let nodeToSwap = (c as VectorNode)
+									nodeToSwap.fillStyleId = themeRef[unlinkedColorName]
+								} else if (c.type === "BOOLEAN_OPERATION") {
+									let nodeToSwap = (c as BooleanOperationNode)
+									nodeToSwap.fillStyleId = themeRef[unlinkedColorName]
+								} else if (c.type === "RECTANGLE") {
+									let nodeToSwap = (c as RectangleNode)
+									nodeToSwap.fillStyleId = themeRef[unlinkedColorName]
+								}
+							})
+
+						}
+					})
+				} else if (node.type === "VECTOR") {
+					let nodeToSwap = (node as VectorNode)
+					nodeToSwap.fillStyleId = themeRef[unlinkedColorName]
+				} else if (node.type === "BOOLEAN_OPERATION") {
+					let nodeToSwap = (node as BooleanOperationNode)
+					nodeToSwap.fillStyleId = themeRef[unlinkedColorName]
+				} else if (node.type === "TEXT") {
+					let nodeToSwap = (node as TextNode)
+					nodeToSwap.fillStyleId = themeRef[unlinkedColorName]
+				} else if (node.type === "ELLIPSE") {
+					let nodeToSwap = (node as EllipseNode)
+					nodeToSwap.fillStyleId = themeRef[unlinkedColorName]
+				} else {
+					console.log(node.type)
 				}
+
 			}
 		})
 
