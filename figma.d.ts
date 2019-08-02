@@ -100,9 +100,9 @@ type ShowUIOptions = {
   height?: number,   // defaults to 200
 }
 
-type PostMessageOptions = {
-  targetOrigin?: string, // defaults to '*'
-}
+// type PostMessageOptions = {
+//   targetOrigin?: string, // defaults to '*'
+// }
 
 type OnMessageProperties = {
   sourceOrigin: string,
