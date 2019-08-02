@@ -34,7 +34,7 @@ export function createColorGuide(colorThemeName: string, sortedColors, n: number
 
 		figma.currentPage.children.forEach(c => {
 			if (c.id === lastStyleId) {
-				console.log('Last one is ' + c.name)
+				// console.log('Last one is ' + c.name)
 				xLastStyle = (c as FrameNode).x
 				xOffset = (xOffset + guideFrameWidth + xLastStyle + colorGuideSpacing) + colorGuideSpacing
 			}
@@ -490,7 +490,33 @@ function createGroupLeadingBlock(
 	groupTitle.fontSize = 24
 	groupTitle.x = (groupTitleFrame.width - groupTitle.width) / 2
 	groupTitle.y = (groupTitleFrame.height - groupTitle.height) / 2
+	groupTitle.textAlignHorizontal = 'CENTER'
+	groupTitle.textAlignHorizontal = 'CENTER'
+	groupTitle.constraints = {horizontal: "CENTER", vertical: "CENTER"}
+
+	var charcter = ''
+	var lastCapital
+	var currentCharacter = ''
+
+	if (groupTitle.characters.length >= 20){
+		for (var i = 0; i<= 20; i++){
+			currentCharacter = groupTitle.characters.charAt(i)
+			// console.log("Current Character: " + currentCharacter)
+			if (currentCharacter == currentCharacter.toUpperCase() && currentCharacter != ' ' && currentCharacter != '' ){
+				// console.log("this is a capital letter")
+				lastCapital = currentCharacter
+			}
+		}
+		// console.log(lastCapital)
+		var sections = groupTitle.characters.split(lastCapital)
+		// console.log(sections)
+		// console.log(sections[0] + "\n" + lastCapital + sections[1])
+		groupTitle.characters = sections[0] + "\n" + lastCapital + sections[1]
+	}
+
+	
 }
+
 
 function getColorNames(fullName: string) {
 	const [themeName, fullColorName] = fullName.split(' / ')
@@ -510,6 +536,7 @@ function getColorNames(fullName: string) {
 		fullColorName
 	}
 }
+
 
 export function createStyle(colorThemeName: string, fullColorName: string, colorValue: string) {
 	// convert color from hex => rgb
