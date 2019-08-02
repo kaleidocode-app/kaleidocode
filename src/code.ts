@@ -69,6 +69,8 @@ figma.ui.onmessage = async msg => {
 			createColorGuide(colorThemeName, sortedColors, themeI)
 		})
 
+		let nodes = figma.currentPage.findAll(node => node.name.startsWith(themeIndicator))
+		figma.viewport.scrollAndZoomIntoView(nodes);
 		figma.closePlugin()
 		return
 	}
